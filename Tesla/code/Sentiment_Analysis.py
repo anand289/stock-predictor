@@ -156,7 +156,7 @@ print("Change vs Neutral_score: ",concatenated_table['neu'].corr(concatenated_ta
 
 #%% Export "tesla_article_table" and  "concatenated_data"
 
-tesla_article_table.to_excel('/Users/anandsingh/Desktop/stock_predictor/Tesla/results/tesla_article_table.xlsx')
-concatenated_table.to_excel('/Users/anandsingh/Desktop/stock_predictor/Tesla/results/concatenated_table.xlsx')
+#tesla_article_table.to_excel('/Users/anandsingh/Desktop/stock_predictor/Tesla/results/tesla_article_table.xlsx')
+#concatenated_table.to_excel('/Users/anandsingh/Desktop/stock_predictor/Tesla/results/concatenated_table.xlsx')
 
 
