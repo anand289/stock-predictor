@@ -1,4 +1,4 @@
-
+# Volitality indicator
 # -*- coding: utf-8 -*-
 """
 Created on Fri Feb  3 19:57:17 2023
