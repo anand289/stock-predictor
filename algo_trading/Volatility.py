@@ -12,7 +12,7 @@ import yfinance as yf
 import datetime
 
 # List of stocks we need the data for
-tickers = ['TSLA','ASML','SPY']
+tickers = ['TSLA','ASML','SPY','DIA']
 ohlcv_data = {}
 
 # Creating a dictionary where key is the ticker name and value is the dataframe with ohlcv_data
@@ -20,6 +20,7 @@ for ticker in tickers:
     temp = yf.download(ticker,period='10y',interval='1d')
     temp.dropna(how='any',inplace=True)
     ohlcv_data[ticker] = temp
+
     
 def volatility(DF):
     df = DF.copy()

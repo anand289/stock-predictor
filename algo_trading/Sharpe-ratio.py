@@ -12,12 +12,12 @@ import yfinance as yf
 import datetime
 
 # List of stocks we need the data for
-tickers = ['TSLA','ASML','SPY','AAPL']
+tickers = ['SPY']
 ohlcv_data = {}
 
 # Creating a dictionary where key is the ticker name and value is the dataframe with ohlcv_data
 for ticker in tickers:
-    temp = yf.download(ticker,period='10y',interval='1d')
+    temp = yf.download(ticker,period='5y',interval='1d')
     temp.dropna(how='any',inplace=True)
     ohlcv_data[ticker] = temp
   
@@ -41,5 +41,5 @@ def sharpe(DF,rf): # rf -> risk free rate. 3% is the last 30 year risk free retu
 
 
 for ticker in ohlcv_data:
-    print("Sharpe-ratio of {} = {}".format(ticker,sharpe(ohlcv_data[ticker],0.03)))
+    print("Sharpe-ratio of {} = {}".format(ticker,sharpe(ohlcv_data[ticker],0.025)))
 
