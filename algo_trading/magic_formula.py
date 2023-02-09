@@ -515,6 +515,7 @@ SPY_universe = ["AAPL",
 "DISH",
 "NWS"]
 
+# add my portfolio stock and SPY stocks in tickers and removing duplocates. 
 tickers = my_portfolio + [x for x in SPY_universe if x not in my_portfolio]
 
 #list of tickers whose financial data needs to be extracted
