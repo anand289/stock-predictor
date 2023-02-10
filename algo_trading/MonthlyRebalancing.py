@@ -40,7 +40,11 @@ def max_dd(DF):
     
 #%% Monthly Data collection:List of all the stocks in SPY as of feb-2-2023. We will assume that the list was almost same 10y back
 
-tickers = ["AAPL",
+my_portfolio = ["AAPL","LCID","RIVN","TSLA","AMZN","NFLX","NDAQ","GNRC","NET","ACI",
+           "GOOGL","META","SNAP","SPY","XSD","INTC","HOOD","DUOL","TEAM","ASML",
+           "MSFT","VZ"]
+
+SPY_universe = ["AAPL",
 "MSFT",
 "AMZN",
 "GOOGL",
@@ -541,6 +545,9 @@ tickers = ["AAPL",
 "DISH",
 "NWS"]
 
+# add my portfolio stock and SPY stocks in tickers and removing duplocates. 
+tickers = my_portfolio + [x for x in SPY_universe if x not in my_portfolio]
+
 ohlcv_data = {}
 
 
@@ -570,7 +577,7 @@ for ticker in tickers:
 return_df.drop(return_df.index[0], inplace=True)
 return_df.dropna(inplace=True,axis=1)
 
-#%% Function to calculate portfolio return iteratively
+# function to calculate portfolio return iteratively
 def pflio(DF,m,x):
     """Returns cumulative portfolio return
     DF = dataframe with monthly return info for all stocks
@@ -579,18 +586,23 @@ def pflio(DF,m,x):
     df = DF.copy()
     portfolio = []
     monthly_ret = [0]
-    for i in range(len(df)):
+    for i in range(len(df)-1):
         if len(portfolio) > 0:
             monthly_ret.append(df[portfolio].iloc[i,:].mean())
+            print("This month's return:",monthly_ret[i])
             bad_stocks = df[portfolio].iloc[i,:].sort_values(ascending=True)[:x].index.values.tolist()
             portfolio = [t for t in portfolio if t not in bad_stocks]
         fill = m - len(portfolio)
         new_picks = df.iloc[i,:].sort_values(ascending=False)[:fill].index.values.tolist()
         portfolio = portfolio + new_picks
-        print(df.index[i])
+        print("----------------------")
+        print("Portfolio for:",df.index[i+1])
         print(portfolio)
-    monthly_ret_df = pd.DataFrame(np.array(monthly_ret),columns=["mon_return"])
+    monthly_ret_df = pd.DataFrame(np.array(monthly_ret),columns=["mon_ret"])
+    print('\n')
+    print("Current portfolio",portfolio)
     return monthly_ret_df
+
 #%% Calculating overall strategy's KPIs
 '''
 grid = pd.DataFrame()
@@ -608,7 +620,7 @@ max_dd(pflio(return_df,2,1))
 
 #%% Visualization
 fig, ax = plt.subplots()
-plt.plot((1+pflio(return_df,6,3)).cumprod())
+plt.plot((1+pflio(return_df,2,1)).cumprod())
 plt.plot((1+SPY["mon_return"].reset_index(drop=True)).cumprod())
 plt.title("Index Return vs Strategy Return")
 plt.ylabel("cumulative return")

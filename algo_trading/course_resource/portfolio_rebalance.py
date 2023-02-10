@@ -82,16 +82,21 @@ def pflio(DF,m,x):
     df = DF.copy()
     portfolio = []
     monthly_ret = [0]
-    for i in range(len(df)):
+    for i in range(len(df)-1):
         if len(portfolio) > 0:
             monthly_ret.append(df[portfolio].iloc[i,:].mean())
+            print("This month's return:",monthly_ret[i])
             bad_stocks = df[portfolio].iloc[i,:].sort_values(ascending=True)[:x].index.values.tolist()
             portfolio = [t for t in portfolio if t not in bad_stocks]
         fill = m - len(portfolio)
         new_picks = df.iloc[i,:].sort_values(ascending=False)[:fill].index.values.tolist()
         portfolio = portfolio + new_picks
+        print("----------------------")
+        print("Portfolio for:",df.index[i+1])
         print(portfolio)
     monthly_ret_df = pd.DataFrame(np.array(monthly_ret),columns=["mon_ret"])
+    print('\n')
+    print("Current portfolio",portfolio)
     return monthly_ret_df
 
 
