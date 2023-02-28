@@ -4,6 +4,10 @@
 Created on Sun Feb  5 09:51:51 2023
 
 @author: anandsingh
+
+Run this script at the 1st (not on 31st because script will not replace 
+                            bad performing stocks until the month end)
+                            of every month and buy $500 of "Current Portfolio"
 """
 
 import numpy as np
@@ -39,10 +43,13 @@ def max_dd(DF):
     return (df['drawdown']/df['cum_roll_max']).max()
     
 #%% Monthly Data collection:List of all the stocks in SPY as of feb-2-2023. We will assume that the list was almost same 10y back
-
+'''
 my_portfolio = ["AAPL","LCID","RIVN","TSLA","AMZN","NFLX","NDAQ","GNRC","NET","ACI",
            "GOOGL","META","SNAP","SPY","XSD","INTC","HOOD","DUOL","TEAM","ASML",
            "MSFT","VZ"]
+'''
+
+my_portfolio = []
 
 SPY_universe = ["AAPL",
 "MSFT",
@@ -544,6 +551,7 @@ SPY_universe = ["AAPL",
 "DVA",
 "DISH",
 "NWS"]
+SPY_universe.sort()
 
 # add my portfolio stock and SPY stocks in tickers and removing duplocates. 
 tickers = my_portfolio + [x for x in SPY_universe if x not in my_portfolio]
@@ -589,7 +597,7 @@ def pflio(DF,m,x):
     for i in range(len(df)-1):
         if len(portfolio) > 0:
             monthly_ret.append(df[portfolio].iloc[i,:].mean())
-            print("This month's return:",monthly_ret[i])
+            print("Month's return:",monthly_ret[i])
             bad_stocks = df[portfolio].iloc[i,:].sort_values(ascending=True)[:x].index.values.tolist()
             portfolio = [t for t in portfolio if t not in bad_stocks]
         fill = m - len(portfolio)
@@ -598,7 +606,7 @@ def pflio(DF,m,x):
         print("----------------------")
         print("Portfolio for:",df.index[i+1])
         print(portfolio)
-    monthly_ret_df = pd.DataFrame(np.array(monthly_ret),columns=["mon_ret"])
+    monthly_ret_df = pd.DataFrame(np.array(monthly_ret),columns=["mon_return"])
     print('\n')
     print("Current portfolio",portfolio)
     return monthly_ret_df
