@@ -521,8 +521,8 @@ tickers = SPY_universe
 ohlcv_data = {}
 returns = pd.Series()
 
-start = datetime.datetime(year=2022, month=11, day=1)
-end = datetime.datetime(year=2022, month=12, day=1)
+start = datetime.datetime(year=2023, month=2, day=1)
+end = datetime.datetime(year=2023, month=3, day=1)
 #end =  datetime.datetime.now()
 
 # Creating a dictionary where key is the ticker name and value is the dataframe with ohlcv_data
