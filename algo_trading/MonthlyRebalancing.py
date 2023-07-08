@@ -561,14 +561,14 @@ ohlcv_data = {}
 
 # Creating a dictionary where key is the ticker name and value is the dataframe with ohlcv_data
 for ticker in tickers:
-    temp = yf.download(ticker,period='10y',interval='1mo')
+    temp = yf.download(ticker,period='5y',interval='1mo')
     temp.dropna(how='any',inplace=True)
     ohlcv_data[ticker] = temp
 tickers = ohlcv_data.keys()
     
 #%% calculating KPIs for Index buy and hold strategy over the same period
 
-SPY = yf.download("SPY",period='10y',interval='1mo')
+SPY = yf.download("SPY",period='3y',interval='1mo')
 SPY["mon_return"] = SPY["Adj Close"].pct_change().fillna(0)
 print("SPY CAGR:{}".format( CAGR(SPY)))
 print("SPY Sharpe:{}" .format(sharpe(SPY,0.025)))

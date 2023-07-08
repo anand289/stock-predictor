@@ -12,6 +12,8 @@ import pandas as pd
 import yfinance as yf
 import datetime as datetime
 
+#%%
+
 SPY_universe = ["AAPL",
 "MSFT",
 "AMZN",
@@ -521,8 +523,44 @@ tickers = SPY_universe
 ohlcv_data = {}
 returns = pd.Series()
 
-start = datetime.datetime(year=2023, month=2, day=1)
-end = datetime.datetime(year=2023, month=3, day=1)
+start = datetime.datetime(year=2023, month=6, day=1)
+end = datetime.datetime(year=2023, month=6, day=30)
+#end =  datetime.datetime.now()
+
+# Creating a dictionary where key is the ticker name and value is the dataframe with ohlcv_data
+for ticker in tickers:
+    temp = yf.download(ticker,start,end)
+    temp.dropna(how='any',inplace=True)
+    ohlcv_data[ticker] = temp
+#%%
+
+def cal_return(DF):
+    df = DF.copy()
+    ret = (df.iloc[-1]['Adj Close']-df.iloc[0]['Open'])/df.iloc[0]['Open']
+    return ret
+#%% THis section will give error, run the next section regardless
+
+for ticker in ohlcv_data:
+    returns[ticker] = cal_return(ohlcv_data[ticker])
+    
+#%%
+sorted_returns = returns.sort_values(ascending=False)
+print(sorted_returns)
+
+#%% Running
+
+mon_1 = "NVDA"
+mon_2 = "CMG"
+
+current_stocks = ["SPY",mon_1,mon_2]
+
+tickers = current_stocks
+
+ohlcv_data = {}
+returns = pd.Series()
+
+start = datetime.datetime(year=2023, month=6, day=1)
+end = datetime.datetime(year=2023, month=6, day=30)
 #end =  datetime.datetime.now()
 
 # Creating a dictionary where key is the ticker name and value is the dataframe with ohlcv_data
@@ -537,6 +575,8 @@ def cal_return(DF):
     ret = (df.iloc[-1]['Adj Close']-df.iloc[0]['Open'])/df.iloc[0]['Open']
     return ret
 
+#%%
+
 for ticker in ohlcv_data:
     returns[ticker] = cal_return(ohlcv_data[ticker])
     
@@ -544,3 +584,5 @@ for ticker in ohlcv_data:
 sorted_returns = returns.sort_values(ascending=False)
 print(sorted_returns)
 
+total_return = (sorted_returns["NVDA"] + sorted_returns["CMG"])/2 - sorted_returns["SPY"]
+print(total_return)
